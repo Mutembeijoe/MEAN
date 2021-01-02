@@ -1,5 +1,18 @@
 const app = require("express")();
 const bodyParser = require("body-parser");
+const Post = require("./models/post");
+const mongoose = require("mongoose");
+
+mongoose
+  .connect(
+    "mongodb+srv://orion:<password>@cluster0.nhjzc.mongodb.net/mean-posts?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log("connected to db");
+  })
+  .catch((err) => {
+    console.log("Failed to connect to DB : ", err);
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,26 +30,35 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/api/posts", (req, res) => {
-  console.log("New Post : ", req.body);
-  res.status(201).json({ message: "Post was successfully Created" });
+app.delete("/api/posts/:id", async (req, res) => {
+  try {
+    console.log("GERE");
+    const result = await Post.deleteOne({ _id: req.params.id });
+    console.log(result);
+    res.status(204).json({ message: "deleted successfully" });
+  } catch (error) {
+    console.log("EROROROOROR");
+  }
 });
 
-app.get("/api/posts", (req, res) => {
-  const posts = [
-    {
-      id: "dgg3h2h3",
-      title: "First Post",
-      content: "This is the first post's content",
-    },
-    {
-      id: "467dhfjj3",
-      title: "Second Post",
-      content: "This is the second post's content",
-    },
-  ];
+app.post("/api/posts", async (req, res) => {
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content,
+  });
+  await post.save();
+  res
+    .status(201)
+    .json({ message: "Post was successfully Created", postId: post._id });
+});
 
-  res.status(200).json({ posts });
+app.get("/api/posts", async (req, res) => {
+  try {
+    let posts = await Post.find();
+    res.status(200).json({ posts });
+  } catch (error) {
+    console.error("Error : ", error);
+  }
 });
 
 module.exports = app;

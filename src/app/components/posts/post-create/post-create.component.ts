@@ -12,11 +12,10 @@ export class PostCreateComponent {
   constructor(private postsS: PostService) {}
 
   onNoteSubmitted(form: NgForm) {
-    console.log('CALLLED');
     if (form.invalid) {
       return;
     }
-
     this.postsS.addPost(form.value.title, form.value.content);
+    form.resetForm();
   }
 }
