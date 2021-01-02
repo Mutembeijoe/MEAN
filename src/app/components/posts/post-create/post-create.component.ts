@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Post } from './../../../interfaces/post';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-post-create',
@@ -6,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent {
-  enteredValue = '';
-  postCreated = '';
+  enteredTitle = '';
+  enteredContent = '';
+  @Output() postCreated = new EventEmitter<Post>();
   onNoteSubmitted() {
-    this.postCreated = this.enteredValue;
+    let post: Post = { title: this.enteredTitle, content: this.enteredContent };
+    this.postCreated.emit(post);
   }
 }

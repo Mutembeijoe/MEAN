@@ -1,11 +1,12 @@
 <mat-card>
   <mat-form-field>
-    <textarea matInput cols="30" rows="10" [(ngModel)]="enteredValue">
+    <input matInput type="text" [(ngModel)]="enteredTitle" />
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput cols="30" rows="10" [(ngModel)]="enteredContent">
     </textarea>
   </mat-form-field>
   <button (click)="onNoteSubmitted()" mat-raised-button color="primary">
     Submit
   </button>
 </mat-card>
-
-<p>output text: {{ postCreated }}</p>
