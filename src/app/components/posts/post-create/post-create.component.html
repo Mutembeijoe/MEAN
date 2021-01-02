@@ -1,12 +1,32 @@
 <mat-card>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="enteredTitle" />
-  </mat-form-field>
-  <mat-form-field>
-    <textarea matInput cols="30" rows="10" [(ngModel)]="enteredContent">
-    </textarea>
-  </mat-form-field>
-  <button (click)="onNoteSubmitted()" mat-raised-button color="primary">
-    Submit
-  </button>
+  <form (submit)="onNoteSubmitted(postForm)" #postForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="title"
+        ngModel
+        #title="ngModel"
+        required
+        minlength="7"
+      />
+      <mat-error *ngIf="title.invalid"
+        >Title of at least length 7 is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <textarea
+        name="content"
+        matInput
+        cols="20"
+        rows="4"
+        ngModel
+        #content="ngModel"
+        required
+      >
+      </textarea>
+      <mat-error *ngIf="content.invalid">Note content is required</mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
 </mat-card>
