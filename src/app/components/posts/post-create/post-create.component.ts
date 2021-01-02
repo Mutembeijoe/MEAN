@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class PostCreateComponent {
   enteredValue = '';
   postCreated = '';
-  onNoteSubmitted(value: string) {
+  onNoteSubmitted() {
     this.postCreated = this.enteredValue;
   }
 }
