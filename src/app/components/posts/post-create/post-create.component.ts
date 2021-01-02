@@ -1,3 +1,4 @@
+import { PostService } from './../../../services/post.service';
 import { Post } from './../../../interfaces/post';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -8,16 +9,14 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent {
-  enteredTitle = '';
-  enteredContent = '';
-  @Output() postCreated = new EventEmitter<Post>();
+  constructor(private postsS: PostService) {}
+
   onNoteSubmitted(form: NgForm) {
     console.log('CALLLED');
     if (form.invalid) {
       return;
     }
 
-    let post: Post = { title: form.value.title, content: form.value.content };
-    this.postCreated.emit(post);
+    this.postsS.addPost(form.value.title, form.value.content);
   }
 }

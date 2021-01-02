@@ -5,6 +5,7 @@
         matInput
         type="text"
         name="title"
+        placeholder="title"
         ngModel
         #title="ngModel"
         required
@@ -23,6 +24,7 @@
         ngModel
         #content="ngModel"
         required
+        placeholder="content"
       >
       </textarea>
       <mat-error *ngIf="content.invalid">Note content is required</mat-error>
