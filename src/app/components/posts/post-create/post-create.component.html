@@ -1,35 +1,29 @@
 <mat-spinner *ngIf="isLoading; else loaded"></mat-spinner>
 <ng-template #loaded>
   <mat-card>
-    <form (submit)="onNoteSubmitted(postForm)" #postForm="ngForm">
+    <form [formGroup]="form!" (ngSubmit)="onNoteSubmitted()">
       <mat-form-field>
         <input
+          formControlName="title"
           matInput
           type="text"
-          name="title"
           placeholder="title"
-          [ngModel]="post?.title"
-          #title="ngModel"
           required
-          minlength="7"
         />
-        <mat-error *ngIf="title.invalid"
+        <mat-error *ngIf="title?.invalid"
           >Title of at least length 7 is required</mat-error
         >
       </mat-form-field>
       <mat-form-field>
         <textarea
-          name="content"
           matInput
           cols="20"
           rows="4"
-          [ngModel]="post?.content"
-          #content="ngModel"
-          required
+          formControlName="content"
           placeholder="content"
         >
         </textarea>
-        <mat-error *ngIf="content.invalid">Note content is required</mat-error>
+        <mat-error *ngIf="content?.invalid">Note content is required</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Submit</button>
     </form>
