@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(
-    "mongodb+srv://orion:<password>@cluster0.nhjzc.mongodb.net/mean-posts?retryWrites=true&w=majority"
+    "mongodb+srv://orion:fZYJinXsWfHWr16z@cluster0.nhjzc.mongodb.net/mean-posts?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("connected to db");
