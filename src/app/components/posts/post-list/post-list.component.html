@@ -1,11 +1,11 @@
-<mat-accordion *ngIf="posts.length > 0; else noPosts">
+<mat-accordion multi="true" *ngIf="posts.length > 0; else noPosts">
   <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
       <mat-panel-title> {{ post.title }} </mat-panel-title>
     </mat-expansion-panel-header>
     <p>{{ post.content }}</p>
     <mat-action-row>
-      <button mat-button color="primary">EDIT</button>
+      <a [routerLink]="['edit', post.id]" mat-button color="primary">EDIT</a>
       <button mat-button color="warn" (click)="onDelete(post.id)">
         DELETE
       </button>

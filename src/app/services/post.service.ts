@@ -1,6 +1,6 @@
 import { Post } from './../interfaces/post';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
@@ -25,6 +25,19 @@ export class PostService {
       });
   }
 
+  updatePost(postId: string, title: string, content: string): void {
+    const post: Post = { id: postId, title, content };
+    this.http
+      .put<{ message: string }>(this.url + postId, post)
+      .subscribe((result) => {
+        const updatePosts = [...this.posts];
+        const oldPostIndex = updatePosts.findIndex((post) => post.id == postId);
+        updatePosts[oldPostIndex] = post;
+        this.posts = updatePosts;
+        this.onPostUpdated.next([...this.posts]);
+      });
+  }
+
   getPosts() {
     this.http
       .get<{ posts: any }>(this.url)
@@ -44,7 +57,6 @@ export class PostService {
   }
 
   deletePost(postId: string) {
-    console.log('POST ID : ', postId);
     this.http.delete(this.url + postId).subscribe(
       (result) => {
         this.posts = this.posts.filter((post) => post.id !== postId);
@@ -53,6 +65,12 @@ export class PostService {
       (error) => {
         console.log(error);
       }
+    );
+  }
+
+  getPost(postId: string) {
+    return this.http.get<{ _id: string; title: string; content: string }>(
+      this.url + postId
     );
   }
 }
