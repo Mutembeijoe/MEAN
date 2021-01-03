@@ -5,3 +5,15 @@ textarea {
 mat-spinner {
   margin: auto;
 }
+
+input[type="file"] {
+  visibility: hidden;
+}
+
+.imagePreview {
+  height: 5rem;
+  margin: 1rem auto;
+}
+.imagePreview img {
+  height: 100%;
+}
