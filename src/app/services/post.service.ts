@@ -1,8 +1,9 @@
 import { Post } from './../interfaces/post';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class PostService {
   private onPostUpdated = new Subject<Post[]>();
   private url: string = 'http://localhost:3000/api/posts/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   addPost(title: string, content: string): void {
     const post: Post = { id: '', title, content };
@@ -22,6 +23,7 @@ export class PostService {
         post.id = result.postId;
         this.posts.push(post);
         this.onPostUpdated.next([...this.posts]);
+        this.router.navigate(['/']);
       });
   }
 
@@ -35,6 +37,7 @@ export class PostService {
         updatePosts[oldPostIndex] = post;
         this.posts = updatePosts;
         this.onPostUpdated.next([...this.posts]);
+        this.router.navigate(['/']);
       });
   }
 

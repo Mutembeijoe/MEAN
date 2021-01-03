@@ -1,18 +1,21 @@
-<mat-accordion multi="true" *ngIf="posts.length > 0; else noPosts">
-  <mat-expansion-panel *ngFor="let post of posts">
-    <mat-expansion-panel-header>
-      <mat-panel-title> {{ post.title }} </mat-panel-title>
-    </mat-expansion-panel-header>
-    <p>{{ post.content }}</p>
-    <mat-action-row>
-      <a [routerLink]="['edit', post.id]" mat-button color="primary">EDIT</a>
-      <button mat-button color="warn" (click)="onDelete(post.id)">
-        DELETE
-      </button>
-    </mat-action-row>
-  </mat-expansion-panel>
-</mat-accordion>
+<mat-spinner *ngIf="isLoading; else postsLoaded"></mat-spinner>
+<ng-template #postsLoaded>
+  <mat-accordion multi="true" *ngIf="posts.length > 0; else noPosts">
+    <mat-expansion-panel *ngFor="let post of posts">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{ post.title }} </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>{{ post.content }}</p>
+      <mat-action-row>
+        <a [routerLink]="['edit', post.id]" mat-button color="primary">EDIT</a>
+        <button mat-button color="warn" (click)="onDelete(post.id)">
+          DELETE
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
 
-<ng-template #noPosts>
-  <p class="no-posts-info">You have no posts yet!</p>
+  <ng-template #noPosts>
+    <p class="no-posts-info">You have no posts yet!</p>
+  </ng-template>
 </ng-template>

@@ -1,7 +1,7 @@
 import { PostService } from './../../../services/post.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Post } from 'src/app/interfaces/post';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-list',
@@ -11,12 +11,15 @@ import { Subscriber, Subscription } from 'rxjs';
 export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   private postsSubscription: Subscription | null = null;
+  isLoading: boolean = false;
 
   constructor(private postsS: PostService) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.postsSubscription = this.postsS.getPosts().subscribe((posts) => {
       this.posts = posts;
+      this.isLoading = false;
     });
   }
 
