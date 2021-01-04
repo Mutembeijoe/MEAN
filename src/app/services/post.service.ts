@@ -15,23 +15,54 @@ export class PostService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  addPost(title: string, content: string): void {
-    const post: Post = { id: '', title, content };
+  addPost(title: string, content: string, file: File): void {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('image', file, title);
     this.http
-      .post<{ message: string; postId: string }>(this.url, post)
-      .subscribe((result) => {
-        post.id = result.postId;
-        this.posts.push(post);
+      .post<{ message: string; post: Post }>(this.url, formData)
+      .subscribe(({ post }) => {
+        const createdPost: Post = {
+          id: post.id,
+          title,
+          content,
+          imagePath: post.imagePath,
+        };
+        this.posts.push(createdPost);
         this.onPostUpdated.next([...this.posts]);
         this.router.navigate(['/']);
       });
   }
 
-  updatePost(postId: string, title: string, content: string): void {
-    const post: Post = { id: postId, title, content };
+  updatePost(
+    postId: string,
+    title: string,
+    content: string,
+    imagePath: string | File
+  ): void {
+    let postData;
+
+    if (typeof imagePath == 'string') {
+      const post: Post = { id: postId, title, content, imagePath };
+      postData = post;
+    } else {
+      postData = new FormData();
+      postData.append('id', postId);
+      postData.append('title', title);
+      postData.append('content', content);
+      postData.append('image', imagePath, title);
+    }
+
     this.http
-      .put<{ message: string }>(this.url + postId, post)
+      .put<{ message: string; post: Post }>(this.url + postId, postData)
       .subscribe((result) => {
+        const post: Post = {
+          id: postId,
+          title,
+          content,
+          imagePath: result.post.imagePath,
+        };
         const updatePosts = [...this.posts];
         const oldPostIndex = updatePosts.findIndex((post) => post.id == postId);
         updatePosts[oldPostIndex] = post;
@@ -47,7 +78,12 @@ export class PostService {
       .pipe(
         map((result) => {
           return result.posts.map((post: any) => {
-            return { id: post._id, title: post.title, content: post.content };
+            return {
+              id: post._id,
+              title: post.title,
+              content: post.content,
+              imagePath: post.imagePath,
+            };
           });
         })
       )
@@ -72,8 +108,11 @@ export class PostService {
   }
 
   getPost(postId: string) {
-    return this.http.get<{ _id: string; title: string; content: string }>(
-      this.url + postId
-    );
+    return this.http.get<{
+      _id: string;
+      title: string;
+      content: string;
+      imagePath: string;
+    }>(this.url + postId);
   }
 }

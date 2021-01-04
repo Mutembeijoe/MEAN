@@ -43,10 +43,12 @@ export class PostCreateComponent implements OnInit {
             id: result._id,
             title: result.title,
             content: result.content,
+            imagePath: result.imagePath,
           };
           this.form?.setValue({
             title: this.post.title,
             content: this.post.content,
+            image: this.post.imagePath,
           });
           this.isLoading = false;
         });
@@ -74,12 +76,17 @@ export class PostCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.mode == Mode.create) {
-      this.postsS.addPost(this.form?.value.title, this.form?.value.content);
+      this.postsS.addPost(
+        this.form?.value.title,
+        this.form?.value.content,
+        this.form?.value.image
+      );
     } else {
       this.postsS.updatePost(
         this.postId!,
         this.form?.value.title,
-        this.form?.value.content
+        this.form?.value.content,
+        this.form?.value.image
       );
     }
     this.form?.reset();
